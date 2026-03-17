@@ -1,0 +1,54 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8888}:80"
+    environment:
+      - DB_HOST=${DB_HOST:-db}
+      - DB_NAME=${DB_NAME:-macaw}
+      - DB_USER=${DB_USER:-macaw}
+      - DB_PASS=${DB_PASS:-macaw}
+      - DB_PORT=${DB_PORT:-3306}
+      - MACAW_ADMIN_EMAIL=${MACAW_ADMIN_EMAIL:-}
+      - MACAW_ORG_NAME=${MACAW_ORG_NAME:-}
+      - MACAW_SMTP_HOST=${MACAW_SMTP_HOST:-}
+      - MACAW_SMTP_PORT=${MACAW_SMTP_PORT:-25}
+      - MACAW_SMTP_USER=${MACAW_SMTP_USER:-}
+      - MACAW_SMTP_PASS=${MACAW_SMTP_PASS:-}
+      - MACAW_BHL_API_KEY=${MACAW_BHL_API_KEY:-}
+      - MACAW_IA_ACCESS_KEY=${MACAW_IA_ACCESS_KEY:-}
+      - MACAW_IA_SECRET=${MACAW_IA_SECRET:-}
+      - MACAW_IA_EMAIL=${MACAW_IA_EMAIL:-}
+      - MACAW_IA_PASSWORD=${MACAW_IA_PASSWORD:-}
+      - MACAW_EXPORT_MODULES=${MACAW_EXPORT_MODULES:-}
+    volumes:
+      - books_data:/var/www/html/books
+      - incoming_data:/var/www/html/incoming
+      - logs_data:/var/www/html/system/application/logs
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-macaw_root}
+      - MYSQL_DATABASE=${DB_NAME:-macaw}
+      - MYSQL_USER=${DB_USER:-macaw}
+      - MYSQL_PASSWORD=${DB_PASS:-macaw}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  books_data:
+  incoming_data:
+  logs_data:
+  db_data:

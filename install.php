@@ -668,8 +668,10 @@
 	function is_installed($dbh) {
 		global $errors;
 		global $messages;
+		global $db;
 
-		$stmt = $dbh->query("SELECT count(*) as thecount FROM information_schema.tables WHERE table_schema = '$db';");
+		$dbname = $db['default']['database'];
+		$stmt = $dbh->query("SELECT count(*) as thecount FROM information_schema.tables WHERE table_schema = '$dbname';");
 		$row = $stmt->fetch();
 		if ($row['thecount'] == 0) {
 			return;

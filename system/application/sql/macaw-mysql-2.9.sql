@@ -1,1 +1,1 @@
-alter table metadata MODIFY id bigint auto_increment;
+ALTER TABLE metadata ADD COLUMN id bigint auto_increment PRIMARY KEY FIRST;

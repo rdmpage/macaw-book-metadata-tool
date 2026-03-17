@@ -1,0 +1,14 @@
+.git
+.gitignore
+.vscode
+.dockerignore
+Dockerfile
+docker-compose.yml
+*.md
+books/
+incoming/
+system/application/logs/
+system/application/config/config.php
+system/application/config/database.php
+system/application/config/macaw.php
+vendor/

@@ -42,5 +42,10 @@ system/application/logs/books
 .vscode
 
 ########################################
+# DOCKER
+# The .env file may contain credentials — never commit it
+.env
+
+########################################
 # PHP Composer
 vendor
